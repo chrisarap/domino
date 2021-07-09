@@ -1,6 +1,6 @@
 class Domino {
 
-	create_array(){
+	createArray(){
 		let arr = [];
 
 		for (var i = 0; i <= 6; i++) {
@@ -17,7 +17,20 @@ class Domino {
 		}
 		return arr;		
 	}
+
+	distrutePieces(quantity, arrr){
+		let arr = this.createArray(), playerHand = [];
+
+		for (var i = 0; i < quantity; i++) {
+			playerHand.push(...arr.splice(Math.floor(Math.random() * (arr.length - 0) + 0), 1));
+			document.write(arr.length + "<br>");
+		}
+
+		console.log(playerHand)
+		console.log(arr)
+	}
 }
 
 var test = new Domino();
-console.log(test.create_array());
+console.log(test.createArray());
+test.distrutePieces(7);
