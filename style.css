@@ -1,0 +1,23 @@
+#one, #two, #pot {
+	background: green;
+	border: solid;
+}
+
+#game {
+	background: red;
+	
+}
+
+.container {
+	border: solid;
+	margin: 3px;
+
+}
+
+.sheet {
+	background: orange;
+
+	border-radius: 10px;
+	width: 70px;
+	height: 35px;
+}
