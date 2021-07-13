@@ -62,33 +62,22 @@ class Domino {
 		}
 	}
 
-	start(arr, name) {
-		console.log(arr[0] + " yeas")
+	start(name, ...arr) {
+		
+		
+		var res = [];
+
 		for (var i = 0; i < arr.length; i++) {
-			if(arr[i][0] == 6 && arr[i][1] == 6){
-				console.log(name + " start 6");
-				return true;				
-			} else if(arr[i][0] == 5 && arr[i][1] == 5){
-				console.log(name + " start 5");
-				return true;
-			} else if(arr[i][0] == 4 && arr[i][1] == 4){
-				console.log(name + " start 4");
-				return true;
-			}else if(arr[i][0] == 3 && arr[i][1] == 3){
-				console.log(name + " start 3");
-				return true;
-			}else if(arr[i][0] == 2 && arr[i][1] == 2){
-				console.log(name + " start 2");
-				return true;
-			}else if(arr[i][0] == 1 && arr[i][1] == 1){
-				console.log(name + " start 1");
-				return true;
-			}else if(arr[i][0] == 0 && arr[i][1] == 0){
-				console.log(name + " start 0");
-				return true;
+			for (var j = 0; j < arr[i].length; j++) {
+
+				if(arr[i][j][0] == arr[i][j][1]) {
+					res.push([arr[i][j][0], name[i]])
+				}
 			}
 		}
-	}
+
+		return res.sort()[res.length - 1];		
+	}	
 }
 
 
@@ -100,14 +89,23 @@ myDomino = test.createArray();
 console.log(myDomino);
 playerOne = test.distrutePieces(myDomino, 7);
 playerTwo = test.distrutePieces(myDomino, 7);
-test.start(playerOne, "one");
-test.start(playerTwo, "two");
+playerThree = test.distrutePieces(myDomino, 7);
+playerFour = test.distrutePieces(myDomino, 7);
+
+document.getElementById("turn").innerHTML = "turn: " + test.start(["one", "two", "three", 'four'], playerOne, playerTwo, playerThree, playerFour);
+
+
 
 
 test.printSheets(playerOne, 'one');
 document.write("<br>");
 test.printSheets(playerTwo, 'two');
 document.write("<br>");
+test.printSheets(playerThree, 'three');
+document.write("<br>");
+test.printSheets(playerFour, 'four');
+document.write("<br>");
+
 test.printSheets(myDomino, 'pot');
 document.write("<br>");
 
