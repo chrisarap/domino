@@ -18,10 +18,10 @@ class Domino {
 		return arr;		
 	}
 
-	distrutePieces(arr, quantity){
+	distrutePieces(arr){
 		let playerHand = [];
 
-		for (var i = 0; i < quantity; i++) {
+		for (var i = 0; i < 7; i++) {
 			playerHand.push(...arr.splice(Math.floor(Math.random() * (arr.length - 0) + 0), 1));
 		}
 
@@ -29,83 +29,173 @@ class Domino {
 	}
 
 	printSheets(arr, name){
+		let	pass 	= document.createElement('input');
+		pass.type = 'submit';
+		pass.className = 'sheet pass';
+		pass.disabled = true;
+		pass.value = 'pass';
+		pass.name = 'pass'
+		
+		var container = document.getElementById(name);
+
+
 		for (var i = 0; i < arr.length; i++) {
-			let btn = document.createElement('input');
+			let btn 	= document.createElement('input');			
 			btn.type = 'submit';
-			btn.className = 'sheet';
-			btn.name = arr[i];
+			btn.className = 'sheet ' + name;
+			btn.name = name;
 			btn.value = arr[i];
+			btn.disabled = true;
+
+
+			// disable btns
+			if (btn.value == [6,6] && arr.map(key => (key[0] == 6 && key[1] == 6) ? true : false).indexOf(true) > -1) {
+				btn.disabled = false;
+			//} else if (name == turn && arr.map(key => (key[0] == 6 && key[1] == 6) ? true : false).indexOf(true) == -1) {
+				/* condition
+				turn
+				enable only start and last
+				*/
+
+			} else if (btn.value[1] == myGlobal[1] || btn.value[0] == myGlobal[1]) {
+				console.log("exist one value");
+			}
+
+
+
+			/*else if(){
+				arr.map(key=>console.log((key[0] == myGlobal[0]) || (key[1] == myGlobal[0]))) ;
+				btn.disabled = false;
+				//pass.disabled = false;
+			}
+
+*/
+
 			btn.onclick = () => {
 					
-					this.start(arr);
+				for (var i = 0; i < arr.length; i++) {
+					if (arr[i] == btn.value) {
+						
+						// add to game array
+						game.push(btn.value);
 
-					for (var i = 0; i < arr.length; i++) {
-						if (arr[i] == btn.value) {
-							console.log(i + " " + arr);
-							
-							game.push(btn.value);
-							arr.splice(i, 1);
-							console.log(arr + " " + name );
+						// delete sheet from player hand
+						arr.splice(i, 1);
 
-							document.getElementById(name).innerHTML = "";
-							this.printSheets(arr, name);
+						// print new player hand
+						document.getElementById(name).innerHTML = "";
+						this.printSheets(arr, name);
 
-							document.getElementById("game").innerHTML = "";
-							this.printSheets(game, "game");
-						}
+						// print new table game
+						document.getElementById("game").innerHTML = "";
+						this.printSheets(game, "game");
+
+						myGlobal = [game[0][0], game[game.length - 1][2]];
+						document.getElementById("myGlobal").innerHTML = myGlobal;
+
+						this.nextTurn(turn);
 					}
-		
+				}	
 			};
 
-			var container = document.getElementById(name);
-			container.appendChild(btn);	
+			container.appendChild(btn);
 		}
+
+		
+
+		pass.onclick = () => {
+			this.nextTurn(turn);
+		}
+		
+		if (name != 'game') {
+			container.appendChild(pass);
+		}
+		
 	}
 
-	start(name, ...arr) {
-		
-		
-		var res = [];
+	start(name, ...arr) {			
+		var res = [], position = ['one', 'two', 'three', 'four'];
 
 		for (var i = 0; i < arr.length; i++) {
 			for (var j = 0; j < arr[i].length; j++) {
 
 				if(arr[i][j][0] == arr[i][j][1]) {
-					res.push([arr[i][j][0], name[i]])
+					res.push([arr[i][j], name[i]]);
 				}
 			}
 		}
+		
+		return res.sort()[res.length - 1][1];
 
-		return res.sort()[res.length - 1];		
-	}	
-}
+	}
 
+	nextTurn(test){
+		if (test == 'one') {
+			turn = 'two';
+			document.getElementById('turn').innerHTML = 'turn: ' + turn;
 
-var game = [];
+			document.getElementById('one').innerHTML = "";
+			newGame.printSheets(playerOne, 'one');
 
+			document.getElementById('two').innerHTML = "";
+			newGame.printSheets(playerTwo, 'two');
+		}
 
-test = new Domino();
-myDomino = test.createArray();
-console.log(myDomino);
-playerOne = test.distrutePieces(myDomino, 7);
-playerTwo = test.distrutePieces(myDomino, 7);
-playerThree = test.distrutePieces(myDomino, 7);
-playerFour = test.distrutePieces(myDomino, 7);
+		if (test == 'two') {
+			turn = 'three';
+			document.getElementById('turn').innerHTML = 'turn: ' + turn;
 
-document.getElementById("turn").innerHTML = "turn: " + test.start(["one", "two", "three", 'four'], playerOne, playerTwo, playerThree, playerFour);
+			document.getElementById('two').innerHTML = "";
+			newGame.printSheets(playerTwo, 'two');
 
+			document.getElementById('three').innerHTML = "";
+			newGame.printSheets(playerThree, 'three');
+		}
 
+		if (test == 'three') {
+			turn = 'four';
+			document.getElementById('turn').innerHTML = 'turn: ' + turn;
 
+			document.getElementById('three').innerHTML = "";
+			newGame.printSheets(playerThree, 'three');
 
-test.printSheets(playerOne, 'one');
-document.write("<br>");
-test.printSheets(playerTwo, 'two');
-document.write("<br>");
-test.printSheets(playerThree, 'three');
-document.write("<br>");
-test.printSheets(playerFour, 'four');
-document.write("<br>");
+			document.getElementById('four').innerHTML = "";
+			newGame.printSheets(playerFour, 'four');
+		}
 
-test.printSheets(myDomino, 'pot');
-document.write("<br>");
+		if (test == 'four') {
+			turn = 'one';
+			document.getElementById('turn').innerHTML = 'turn: ' + turn;
 
+			document.getElementById('four').innerHTML = "";
+			newGame.printSheets(playerFour, 'four');
+
+			document.getElementById('one').innerHTML = "";
+			newGame.printSheets(playerOne, 'one');
+		}
+	}
+
+} // end class
+
+var game = [], myGlobal = [];
+
+// create object
+var newGame = new Domino();
+// create pieces
+var domino = newGame.createArray();
+
+// players's hands
+var playerOne 	= newGame.distrutePieces(domino);
+var playerTwo 	= newGame.distrutePieces(domino);
+var playerThree = newGame.distrutePieces(domino);
+var playerFour 	= newGame.distrutePieces(domino);
+
+//knowing who start
+var turn = newGame.start(['one', 'two', 'three', 'four'], playerOne, playerTwo, playerThree, playerFour);
+document.getElementById('turn').innerHTML = 'turn: ' + turn;
+
+// print sheets
+newGame.printSheets(playerOne, 'one');
+newGame.printSheets(playerTwo, 'two');
+newGame.printSheets(playerThree, 'three');
+newGame.printSheets(playerFour, 'four');
