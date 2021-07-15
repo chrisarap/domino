@@ -15,6 +15,7 @@ class Domino {
 				}
 			} 
 		}
+
 		return arr;		
 	}
 
@@ -45,39 +46,32 @@ class Domino {
 			btn.className = 'sheet ' + name;
 			btn.name = name;
 			btn.value = arr[i];
-			btn.disabled = true;
+			btn.disabled = false;
 
 
+			/*
 			// disable btns
 			if (btn.value == [6,6] && arr.map(key => (key[0] == 6 && key[1] == 6) ? true : false).indexOf(true) > -1) {
 				btn.disabled = false;
-			//} else if (name == turn && arr.map(key => (key[0] == 6 && key[1] == 6) ? true : false).indexOf(true) == -1) {
-				/* condition
-				turn
-				enable only start and last
-				*/
-
-			} else if (btn.value[1] == myGlobal[1] || btn.value[0] == myGlobal[1]) {
-				console.log("exist one value");
-			}
-
-
-
-			/*else if(){
-				arr.map(key=>console.log((key[0] == myGlobal[0]) || (key[1] == myGlobal[0]))) ;
+			} else if (
+				myGlobal[0] == arr[i][0] || 
+				myGlobal[0] == arr[i][1] || 
+				myGlobal[1] == arr[i][0] || 
+				myGlobal[1] == arr[i][1] ) {
+				
 				btn.disabled = false;
-				//pass.disabled = false;
+			} else {
+				pass.disabled = false;
 			}
-
-*/
+			*/
 
 			btn.onclick = () => {
 					
 				for (var i = 0; i < arr.length; i++) {
 					if (arr[i] == btn.value) {
 						
-						// add to game array
-						game.push(btn.value);
+						// call reverse function
+						this.reverse(btn.value[0], btn.value[2]);
 
 						// delete sheet from player hand
 						arr.splice(i, 1);
@@ -90,7 +84,7 @@ class Domino {
 						document.getElementById("game").innerHTML = "";
 						this.printSheets(game, "game");
 
-						myGlobal = [game[0][0], game[game.length - 1][2]];
+						myGlobal = [game[0][0], game[game.length - 1][1]];
 						document.getElementById("myGlobal").innerHTML = myGlobal;
 
 						this.nextTurn(turn);
@@ -127,6 +121,20 @@ class Domino {
 		
 		return res.sort()[res.length - 1][1];
 
+	}
+
+	reverse(...value){
+		if (myGlobal[0] == value[1]) {
+			game.unshift(value);
+		} else if (myGlobal[0] == value[0]) {
+			game.unshift(value.reverse());
+		} else if (myGlobal[1] == value[1]) {
+			game.push(value.reverse());
+		}else if (myGlobal[1] == value[1]) {
+			game.push(value);
+		}else {
+			game.push(value)
+		}	
 	}
 
 	nextTurn(test){
