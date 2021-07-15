@@ -46,24 +46,12 @@ class Domino {
 			btn.className = 'sheet ' + name;
 			btn.name = name;
 			btn.value = arr[i];
-			btn.disabled = false;
+			btn.disabled = true;
 
-
-			/*
-			// disable btns
-			if (btn.value == [6,6] && arr.map(key => (key[0] == 6 && key[1] == 6) ? true : false).indexOf(true) > -1) {
-				btn.disabled = false;
-			} else if (
-				myGlobal[0] == arr[i][0] || 
-				myGlobal[0] == arr[i][1] || 
-				myGlobal[1] == arr[i][0] || 
-				myGlobal[1] == arr[i][1] ) {
-				
-				btn.disabled = false;
-			} else {
-				pass.disabled = false;
-			}
-			*/
+			this.disable(arr, btn, name, btn.value[0], btn.value[2]);
+			
+			
+			
 
 			btn.onclick = () => {
 					
@@ -135,6 +123,25 @@ class Domino {
 		}else {
 			game.push(value)
 		}	
+	}
+
+	disable(arr, btn, name, ...value){
+		
+
+		arr.find((key, index, array)=>{
+			if( array[index][0] === 6 && array[index][1] === 6 ){
+				if(name == turn){
+					console.log(array[index][0] === 6 && array[index][1] === 6);
+					return btn.disabled = false;
+
+				}
+			} else if ( array[index][0] == myGlobal[0] || array[index][1] == myGlobal[0] || array[index][0] == myGlobal[1] || array[index][1] == myGlobal[1]) {
+				if(name == turn){
+					return btn.disabled = false;
+
+				}
+			}
+		});
 	}
 
 	nextTurn(test){
