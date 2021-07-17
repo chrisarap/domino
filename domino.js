@@ -39,7 +39,6 @@ class Domino {
 		
 		var container = document.getElementById(name);
 
-
 		for (var i = 0; i < arr.length; i++) {
 			let btn 	= document.createElement('input');			
 			btn.type = 'submit';
@@ -50,9 +49,6 @@ class Domino {
 
 			this.disable(arr, btn, name, btn.value[0], btn.value[2]);
 			
-			
-			
-
 			btn.onclick = () => {
 					
 				for (var i = 0; i < arr.length; i++) {
@@ -127,21 +123,21 @@ class Domino {
 
 	disable(arr, btn, name, ...value){
 		
+		// parse every value from string to number
+		var numOne = parseInt(value[0]), numTwo = parseInt(value[1]);
+		var globalOne = parseInt(myGlobal[0]), globalTwo = parseInt(myGlobal[1]);
+		
+		// start with [6|6]
+		if (myGlobal.length == 0 && numOne == 6 && numTwo == 6) {
+			btn.disabled = false;
+		}
 
-		arr.find((key, index, array)=>{
-			if( array[index][0] === 6 && array[index][1] === 6 ){
-				if(name == turn){
-					console.log(array[index][0] === 6 && array[index][1] === 6);
-					return btn.disabled = false;
-
-				}
-			} else if ( array[index][0] == myGlobal[0] || array[index][1] == myGlobal[0] || array[index][0] == myGlobal[1] || array[index][1] == myGlobal[1]) {
-				if(name == turn){
-					return btn.disabled = false;
-
-				}
+		// check global
+		if (globalOne == numOne || globalOne == numTwo || globalTwo == numOne || globalTwo == numTwo ) {
+			if (name == turn) {
+				btn.disabled = false;
 			}
-		});
+		}	
 	}
 
 	nextTurn(test){
