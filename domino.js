@@ -29,7 +29,9 @@ class Domino {
 		return playerHand;
 	}
 
-	printSheets(arr, name){
+	printSheets(arr, name, recursion=''){
+		//console.log("playerHand "+ name + ": "+ arr.length + " re: " + recursion);
+
 		let count = 0;
 		let	pass 	= document.createElement('input');
 		pass.type = 'submit';
@@ -52,8 +54,9 @@ class Domino {
 			
 
 			btn.onclick = () => {
-					
+				
 				for (var i = 0; i < arr.length; i++) {
+					console.log("inside click");
 					if (arr[i] == btn.value) {
 						
 						// call reverse function
@@ -64,11 +67,11 @@ class Domino {
 
 						// print new player hand
 						document.getElementById(name).innerHTML = "";
-						this.printSheets(arr, name);
+						this.printSheets(arr, name, 'yes');
 
 						// print new table game
 						document.getElementById("game").innerHTML = "";
-						this.printSheets(game, "game");
+						this.printSheets(game, "game", 'yes');
 
 						myGlobal = [game[0][0], game[game.length - 1][1]];
 						document.getElementById("myGlobal").innerHTML = myGlobal;
@@ -77,12 +80,18 @@ class Domino {
 
 						truncate = 0;
 						document.getElementById('truncate').innerHTML = 'truncate: ' + truncate;
+
+						if (arr.length == 0) {
+							console.log("the player " + name + " win");
+							winner = name;
+							this.calculateScore([playerOne, playerThree], [playerTwo, playerFour]);
+
+						}
 					}
-				}	
+				}			
 			};
 
-
-			container.appendChild(btn);
+			container.appendChild(btn);			
 		}
 
 		if (count && turn == name) {
@@ -95,13 +104,17 @@ class Domino {
 			document.getElementById('truncate').innerHTML = 'truncate: ' + truncate;
 
 			if (truncate == 4) {
-				alert("game over");
+				//console.log("the player " + name + " win");
+				winner = 'truncate';
+				this.calculateScore([playerOne, playerThree], [playerTwo, playerFour]);
 			}
 		}
 		
 		if (name != 'game') {
 			container.appendChild(pass);
 		}
+
+		
 		
 	}
 
@@ -150,6 +163,33 @@ class Domino {
 			}
 		} else {
 			return 1;
+		}
+	}
+
+	calculateScore(mine, pc){
+		let arr1 = [], arr2 = [];
+
+		mine[0].map(value => arr1.push(value[0], value[1]));
+		mine[1].map(value => arr1.push(value[0], value[1]));
+
+		pc[0].map(value => arr2.push(value[0], value[1]));
+		pc[1].map(value => arr2.push(value[0], value[1]));
+
+		
+		if (winner == 'one' || winner == 'three') {
+			
+			console.log(arr1.reduce((sum, value) => sum += value));
+			myScore += arr2.reduce((sum, value) => sum += value);
+			document.getElementById('myScore').innerHTML = "myScore: " + myScore;
+
+		} else if (winner == 'two' || winner == 'four') {} {
+			
+			console.log(arr2.reduce((sum, value) => sum += value));	
+			pcScore += arr1.reduce((sum, value) => sum += value);
+			document.getElementById('pcScore').innerHTML = "pcScore: " + pcScore;
+
+		} else if (winner == 'truncate') {
+			
 		}
 	}
 
@@ -202,8 +242,11 @@ class Domino {
 } // end class
 
 var game = [], myGlobal = [];
-var count = 0, truncate = 0; 
+var count = 0, truncate = 0, pcScore = 0, myScore = 0, winner = '';
 
+
+document.getElementById('myScore').innerHTML = "myScore: " + myScore;
+document.getElementById('pcScore').innerHTML = "pcScore: " + pcScore;
 
 // create object
 var newGame = new Domino();
@@ -226,3 +269,6 @@ newGame.printSheets(playerOne, 'one');
 newGame.printSheets(playerTwo, 'two');
 newGame.printSheets(playerThree, 'three');
 newGame.printSheets(playerFour, 'four');
+
+
+//newGame.calculateScore([playerOne, playerThree], [playerTwo, playerFour]);
