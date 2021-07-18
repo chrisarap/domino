@@ -30,12 +30,13 @@ class Domino {
 	}
 
 	printSheets(arr, name){
+		let count = 0;
 		let	pass 	= document.createElement('input');
 		pass.type = 'submit';
 		pass.className = 'sheet pass';
 		pass.disabled = true;
 		pass.value = 'pass';
-		pass.name = 'pass'
+		pass.name = 'pass';
 		
 		var container = document.getElementById(name);
 
@@ -47,8 +48,9 @@ class Domino {
 			btn.value = arr[i];
 			btn.disabled = true;
 
-			this.disable(arr, btn, name, btn.value[0], btn.value[2]);
+			count += this.disable(btn, name, btn.value[0], btn.value[2]);
 			
+
 			btn.onclick = () => {
 					
 				for (var i = 0; i < arr.length; i++) {
@@ -76,10 +78,15 @@ class Domino {
 				}	
 			};
 
+
 			container.appendChild(btn);
 		}
 
-		
+		console.log(count);
+
+		if (count && turn == name) {
+			pass.disabled = false;
+		}
 
 		pass.onclick = () => {
 			this.nextTurn(turn);
@@ -121,7 +128,7 @@ class Domino {
 		}	
 	}
 
-	disable(arr, btn, name, ...value){
+	disable(btn, name, ...value){
 		
 		// parse every value from string to number
 		var numOne = parseInt(value[0]), numTwo = parseInt(value[1]);
@@ -130,14 +137,13 @@ class Domino {
 		// start with [6|6]
 		if (myGlobal.length == 0 && numOne == 6 && numTwo == 6) {
 			btn.disabled = false;
-		}
-
-		// check global
-		if (globalOne == numOne || globalOne == numTwo || globalTwo == numOne || globalTwo == numTwo ) {
+		} else if (globalOne == numOne || globalOne == numTwo || globalTwo == numOne || globalTwo == numTwo ) {
 			if (name == turn) {
 				btn.disabled = false;
 			}
-		}	
+		} else {
+			return 1;
+		}
 	}
 
 	nextTurn(test){
@@ -189,6 +195,7 @@ class Domino {
 } // end class
 
 var game = [], myGlobal = [];
+var count = 0;
 
 // create object
 var newGame = new Domino();
