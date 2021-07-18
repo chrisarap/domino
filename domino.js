@@ -74,6 +74,9 @@ class Domino {
 						document.getElementById("myGlobal").innerHTML = myGlobal;
 
 						this.nextTurn(turn);
+
+						truncate = 0;
+						document.getElementById('truncate').innerHTML = 'truncate: ' + truncate;
 					}
 				}	
 			};
@@ -82,14 +85,18 @@ class Domino {
 			container.appendChild(btn);
 		}
 
-		console.log(count);
-
 		if (count && turn == name) {
 			pass.disabled = false;
 		}
 
 		pass.onclick = () => {
 			this.nextTurn(turn);
+			truncate++;
+			document.getElementById('truncate').innerHTML = 'truncate: ' + truncate;
+
+			if (truncate == 4) {
+				alert("game over");
+			}
 		}
 		
 		if (name != 'game') {
@@ -195,7 +202,8 @@ class Domino {
 } // end class
 
 var game = [], myGlobal = [];
-var count = 0;
+var count = 0, truncate = 0; 
+
 
 // create object
 var newGame = new Domino();
@@ -211,6 +219,7 @@ var playerFour 	= newGame.distrutePieces(domino);
 //knowing who start
 var turn = newGame.start(['one', 'two', 'three', 'four'], playerOne, playerTwo, playerThree, playerFour);
 document.getElementById('turn').innerHTML = 'turn: ' + turn;
+document.getElementById('truncate').innerHTML = 'truncate: ' + truncate;
 
 // print sheets
 newGame.printSheets(playerOne, 'one');
